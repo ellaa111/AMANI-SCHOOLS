@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Attendance</h2>
+<div class="card">
+<form method="get" style="display:flex; gap:8px;">
+  <select name="class_id" required>
+    <option value="">— Class —</option>
+    {% for c in classes %}
+    <option value="{{ c.id }}" {% if class_id|int == c.id %}selected{% endif %}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+  <input type="date" name="date" value="{{ date }}" required>
+  <button>Load</button>
+</form>
+</div>
+{% if students %}
+<div class="card">
+{% for s in students %}
+  <form method="post" style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="student_id" value="{{ s.id }}">
+    <input type="hidden" name="date" value="{{ date }}">
+    <input type="hidden" name="class_id" value="{{ class_id }}">
+    <span style="flex:1;">{{ s.full_name }} ({{ s.admission_no }})</span>
+    {% set cur = rec_map.get(s.id) %}
+    <select name="status">
+      {% for st in ['Present','Absent','Late','Excused'] %}
+      <option {% if cur == st %}selected{% endif %}>{{ st }}</option>
+      {% endfor %}
+    </select>
+    <button>Save</button>
+  </form>
+{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

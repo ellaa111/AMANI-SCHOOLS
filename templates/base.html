@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <title>Amani Schools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body { font-family: system-ui, sans-serif; background: #f4f6f8; }
+    nav { background: #1a5276; padding: 10px 20px; display: flex; gap: 16px; align-items: center; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; }
+    nav .brand { font-weight: bold; margin-right: auto; }
+    .container { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
+    th { background: #eef2f6; }
+    input, select, textarea { padding: 7px; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 8px; }
+    button, .btn { background: #1a5276; color: #fff; border: 0; padding: 8px 14px; border-radius: 4px; cursor: pointer; }
+    .card { background: #fff; padding: 16px; border-radius: 6px; margin-bottom: 16px; }
+    .flash { padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; }
+    .flash.success { background: #d5f5e3; color: #1e8449; }
+    .flash.error { background: #fadbd8; color: #c0392b; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .stat { text-align: center; padding: 20px; }
+    .stat h2 { font-size: 32px; color: #1a5276; }
+  </style>
+</head>
+<body>
+{% if session.get('user') %}
+<nav>
+  <span class="brand">🎓 Amani Schools</span>
+  <a href="{{ url_for('dashboard') }}">Dashboard</a>
+  {% if session['role'] in ('admin','teacher') %}
+  <a href="{{ url_for('students') }}">Students</a>
+  <a href="{{ url_for('attendance') }}">Attendance</a>
+  <a href="{{ url_for('results') }}">Results</a>
+  {% endif %}
+  <a href="{{ url_for('fees') }}">Fees</a>
+  <a href="{{ url_for('announcements') }}">Announcements</a>
+  <a href="{{ url_for('logout') }}">Logout ({{ session['name'] }})</a>
+</nav>
+{% endif %}
+<div class="container">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

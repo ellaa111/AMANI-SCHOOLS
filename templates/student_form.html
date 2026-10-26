@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Edit' if student else 'Add' }} Student</h2>
+<div class="card">
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input name="full_name" placeholder="Full name" value="{{ student.full_name if student else '' }}" required>
+  <input name="admission_no" placeholder="Admission no" value="{{ student.admission_no if student else '' }}" required>
+  <select name="gender">
+    {% for g in ['Male','Female'] %}
+    <option value="{{ g }}" {% if student and student.gender == g %}selected{% endif %}>{{ g }}</option>
+    {% endfor %}
+  </select>
+  <input name="date_of_birth" type="date" value="{{ student.date_of_birth if student else '' }}">
+  <select name="class_id">
+    <option value="">— Class —</option>
+    {% for c in classes %}
+    <option value="{{ c.id }}" {% if student and student.class_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+  <input name="parent_phone" placeholder="Parent phone" value="{{ student.parent_phone if student else '' }}">
+  <button>Save</button>
+</form>
+</div>
+{% endblock %}

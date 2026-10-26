@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Fees</h2>
+<table>
+  <tr><th>Student</th><th>Term</th><th>Amount</th><th>Paid</th><th>Balance</th><th>Status</th></tr>
+  {% for f in fees %}
+  <tr>
+    <td>{{ f.students.full_name if f.students else f.student_id }}</td>
+    <td>{{ f.term }}</td><td>{{ f.amount }}</td><td>{{ f.paid }}</td>
+    <td>{{ f.amount - f.paid }}</td><td>{{ f.status }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

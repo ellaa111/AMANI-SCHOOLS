@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Announcements</h2>
+{% if session['role'] == 'admin' %}
+<div class="card">
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input name="title" placeholder="Title" required>
+  <textarea name="body" placeholder="Message..." rows="3" required></textarea>
+  <button>Post</button>
+</form>
+</div>
+{% endif %}
+{% for a in rows %}
+<div class="card"><b>{{ a.title }}</b><br>{{ a.body }}<br><small>{{ a.created_at }}</small></div>
+{% else %}<p>No announcements yet.</p>{% endfor %}
+{% endblock %}

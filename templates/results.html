@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Results</h2>
+<div class="card">
+<form method="get">
+  <select name="class_id" required onchange="this.form.submit()">
+    <option value="">— Select class —</option>
+    {% for c in classes %}
+    <option value="{{ c.id }}" {% if class_id|int == c.id %}selected{% endif %}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+</form>
+{% if students %}
+<form method="post" style="display:flex; gap:8px;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <select name="student_id" required>
+    {% for s in students %}<option value="{{ s.id }}">{{ s.full_name }}</option>{% endfor %}
+  </select>
+  <input name="subject" placeholder="Subject" required>
+  <input name="exam_name" placeholder="Exam (e.g. Mid-term)" required>
+  <input name="marks" type="number" step="0.5" placeholder="Marks" required>
+  <input name="grade" placeholder="Grade">
+  <button>Add</button>
+</form>
+{% endif %}
+</div>
+<table>
+  <tr><th>Student</th><th>Subject</th><th>Exam</th><th>Marks</th><th>Grade</th></tr>
+  {% for r in results %}
+  <tr>
+    <td>{{ students | selectattr('id','equalto',r.student_id) | map(attribute='full_name') | first }}</td>
+    <td>{{ r.subject }}</td><td>{{ r.exam_name }}</td><td>{{ r.marks }}</td><td>{{ r.grade }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
